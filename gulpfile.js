@@ -48,6 +48,8 @@ const distPath = "dist/";
 const path = {
   build: {
     html: distPath,
+    sitemap: distPath,
+    robots: distPath,
     php: distPath,
     php2: distPath,
     js: distPath + "assets/js/",
@@ -59,6 +61,8 @@ const path = {
   },
   src: {
     html: srcPath + "*.html",
+    sitemap: srcPath + "sitemap.xml",
+    robots: srcPath + "robots.txt",
     php: srcPath + "assets/files/*.pdf",
     php2: srcPath + "assets/php/*.php",
     js: srcPath + "assets/js/*.js",
@@ -71,6 +75,8 @@ const path = {
   },
   watch: {
     html: srcPath + "**/*.html",
+    sitemap: srcPath + "sitemap.xml",
+    robots: srcPath + "robots.txt",
     php: srcPath + "**/*.pdf",
     php2: srcPath + "**/*.php",
     js: srcPath + "assets/js/**/*.js",
@@ -134,6 +140,16 @@ function html(cb) {
     .pipe(browserSync.reload({ stream: true }));
 
   cb();
+}
+
+function sitemap() {
+  return src(path.src.sitemap)
+    .pipe(dest(path.build.sitemap));
+}
+
+function robots() {
+  return src(path.src.robots)
+    .pipe(dest(path.build.robots));
 }
 
 function php(cb) {
@@ -436,6 +452,8 @@ function toEnd() {
 
 function watchFiles() {
   gulp.watch([path.watch.html], html);
+  gulp.watch([path.watch.sitemap], sitemap);
+  gulp.watch([path.watch.robots], robots);
   // gulp.watch([path.watch.pug], pugs)
   // gulp.watch([path.watch.css], vendorcss);
   gulp.watch([path.watch.php], php)
@@ -455,18 +473,20 @@ function imagesWithoutMin() {
     .pipe(browserSync.reload({ stream: true }));
 }
 
-const buildOld = gulp.series(clean, css, gulp.parallel(html, php, php2, vendorcss, js, images, fonts));
-const start = gulp.series(cleanWithoutImg, css, gulp.parallel(html, php, php2, js, fonts, sprites));
+const buildOld = gulp.series(clean, css, gulp.parallel(html, sitemap, robots, php, php2, vendorcss, js, images, fonts));
+const start = gulp.series(cleanWithoutImg, css, gulp.parallel(html, sitemap, robots, php, php2, js, fonts, sprites));
 const watch = gulp.parallel(start, watchFiles, serve);
 const build = gulp.parallel(buildOld, watchFiles, serve);
-const buildCleanCSS = gulp.series(clean, cleanCss, html, gulp.parallel(js, images, fonts));
+const buildCleanCSS = gulp.series(clean, cleanCss, html, gulp.parallel(sitemap, robots, js, images, fonts));
 const make = gulp.series(gulp.parallel(newFile, toEnd));
-const buildNMin = gulp.series(clean, css, html, js, images, fonts, sprites);
+const buildNMin = gulp.series(clean, css, html, gulp.parallel(sitemap, robots), js, images, fonts, sprites);
 
 /* Exports Tasks */
 
 exports.make = make;
 exports.html = html;
+exports.sitemap = sitemap;
+exports.robots = robots;
 exports.php = php;
 exports.php2 = php2;
 exports.css = css;
