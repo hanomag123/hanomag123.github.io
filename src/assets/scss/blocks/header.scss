@@ -15,8 +15,17 @@ header {
   align-items: center;
 
   @include breakpoint($xl-bp) {
-    padding-top: 1.6rem;
-    padding-bottom: 1.6rem;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+
+    position: sticky;
+    top: 1rem;
+    border-radius: 1.6rem;
+
+    left: 0.8rem;
+
+    width: calc(100% - 1.6rem);
+    border: 1px solid rgba(77, 62, 58, 0.14);
   }
 
   nav {
@@ -35,17 +44,21 @@ header {
 
       position: fixed;
       top: 8rem;
-      left: 0;
-      background-color: var(--black);
+      left: 0.8rem;
 
-      width: 100%;
-      height: calc(100% - 8rem);
+      width: calc(100% - 1.6rem);
+      background-color: var(--white);
+
+      height: auto;
+      max-height: calc(100% - 8rem);
+      overflow: auto;
 
       z-index: 20;
 
-      color: var(--white);
-
       padding: 1.6rem;
+
+      border: 1px solid rgba(77, 62, 58, 0.14);
+      border-radius: 1.6rem;
     }
   }
 }
@@ -54,6 +67,7 @@ header {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }

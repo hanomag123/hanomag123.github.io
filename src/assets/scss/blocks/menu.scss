@@ -10,13 +10,16 @@
 
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
+    background-size: 2.5rem;
+
+    border: 1px solid rgba(77, 62, 58, 0.14);
+    border-radius: 1rem;
   }
 
   &.open {
     @include breakpoint($xl-bp) {
       background-image: url("data:image/svg+xml,%3Csvg width='25' height='25' viewBox='0 0 25 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.25 23.25L23.25 1.25' stroke='%23363636' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M23.25 23.25L1.25 1.25' stroke='%23363636' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
-      background-size: 2.5rem;
+      background-size: 1.5rem;
     }
 
     &+nav {
