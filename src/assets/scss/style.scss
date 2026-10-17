@@ -70,8 +70,8 @@ section {
   padding-bottom: 10rem;
 
   @include breakpoint($xl-bp) {
-    padding-top: 6rem;
-    padding-bottom: 6rem;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
   }
 
   &:nth-child(odd) {}
