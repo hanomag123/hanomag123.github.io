@@ -23,6 +23,7 @@ const argv = require('yargs').argv;
 const footer = require('gulp-footer');
 const svgSprite = require('gulp-svg-sprite')
 const replace = require('gulp-string-replace');
+const groupCssMediaQueries = require('gulp-group-css-media-queries');
 
 const Vinyl = require('vinyl')
 
@@ -47,6 +48,7 @@ const path = {
   build: {
     html: distPath,
     php: distPath,
+    php2: distPath,
     js: distPath + "assets/js/",
     css: distPath + "assets/css/",
     images: distPath + "assets/images/",
@@ -56,7 +58,8 @@ const path = {
   },
   src: {
     html: srcPath + "*.html",
-    php: srcPath + "*.php",
+    php: srcPath + "assets/files/*.pdf",
+    php2: srcPath + "assets/php/*.php",
     js: srcPath + "assets/js/*.js",
     css: srcPath + "assets/scss/*.scss",
     vendorcss: srcPath + "assets/js/components/*.css",
@@ -67,7 +70,8 @@ const path = {
   },
   watch: {
     html: srcPath + "**/*.html",
-    php: srcPath + "**/*.php",
+    php: srcPath + "**/*.pdf",
+    php2: srcPath + "**/*.php",
     js: srcPath + "assets/js/**/*.js",
     css: srcPath + "assets/scss/**/*.scss",
     vendorcss: srcPath + "assets/js/components/*.css",
@@ -119,6 +123,9 @@ function html(cb) {
     .pipe(fileInclude({
       prefix: '@',
       basepath: '@file',
+      context: {
+        telegram: 'https://t.me/hanomag_13'
+      }
     }))
     .pipe(dest(path.build.html))
     .pipe(browserSync.reload({ stream: true }));
@@ -129,6 +136,12 @@ function html(cb) {
 function php(cb) {
   return src(path.src.php, { base: srcPath })
     .pipe(dest(path.build.php))
+    .pipe(browserSync.reload({ stream: true }));
+}
+
+function php2(cb) {
+  return src(path.src.php2, { base: srcPath })
+    .pipe(dest(path.build.php2))
     .pipe(browserSync.reload({ stream: true }));
 }
 
@@ -164,6 +177,7 @@ function css(cb) {
     //   })
     // )
     .pipe(removeComments())
+    .pipe(groupCssMediaQueries())
     // .pipe(dest(path.build.css))
     // .pipe(
     //   rename({
@@ -218,6 +232,7 @@ function cleanCss(cb) {
       })
     )
     .pipe(removeComments())
+    .pipe(groupCssMediaQueries())
     .pipe(dest(path.build.css))
     .pipe(browserSync.reload({ stream: true }));
 
@@ -421,6 +436,7 @@ function watchFiles() {
   // gulp.watch([path.watch.pug], pugs)
   // gulp.watch([path.watch.css], vendorcss);
   gulp.watch([path.watch.php], php)
+   gulp.watch([path.watch.php2], php2)
   gulp.watch([path.watch.css], cssWatch);
   gulp.watch([path.watch.js], jsWatch);
   gulp.watch([path.watch.images], imagesWatch);
@@ -436,8 +452,8 @@ function imagesWithoutMin() {
     .pipe(browserSync.reload({ stream: true }));
 }
 
-const buildOld = gulp.series(clean, gulp.parallel(html, php, css, vendorcss, js, images, fonts));
-const start = gulp.series(cleanWithoutImg, gulp.parallel(html, php, css, js, fonts, sprites));
+const buildOld = gulp.series(clean, gulp.parallel(html, php, php2, css, vendorcss, js, images, fonts));
+const start = gulp.series(cleanWithoutImg, gulp.parallel(html, php, php2, css, js, fonts, sprites));
 const watch = gulp.parallel(start, watchFiles, serve);
 const build = gulp.parallel(buildOld, watchFiles, serve);
 const buildCleanCSS = gulp.series(clean, gulp.parallel(html, cleanCss, js, images, fonts));
@@ -446,10 +462,10 @@ const buildNMin = gulp.series(clean, html, css, js, images, fonts, sprites);
 
 /* Exports Tasks */
 
-exports["make:page"] = make;
 exports.make = make;
 exports.html = html;
 exports.php = php;
+exports.php2 = php2;
 exports.css = css;
 exports.js = js;
 exports.images = images;

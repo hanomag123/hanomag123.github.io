@@ -1,19 +1,17 @@
-@import "fonts";
-
-// @tailwind base;
-// @tailwind components;
-// @tailwind utilities;
-
 @import "vars";
 @import "mixins";
 @import "vendor/reset";
 
 html {
+
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+
   box-sizing: border-box;
+
+  scroll-behavior: smooth;
+
   font-size: calc(100vw / 1920 * 10);
-  @include breakpoint($cos-bp) {
-    font-size: calc(100vw / 1440 * 10);
-  }
 
   @include breakpoint($xl-bp) {
     font-size: calc(100vw / 768 * 10);
@@ -23,8 +21,6 @@ html {
     font-size: calc(100vw / 375 * 10);
   }
 }
-
-@import './blocks/swiper.scss';
 
 *,
 *:before,
@@ -36,6 +32,16 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  line-height: 1.65;
+  letter-spacing: -0.02em;
+
+  background-color: var(--white);
+  color: var(--black);
+
+  font-size: 1.8rem;
 }
 
 main {
@@ -47,54 +53,168 @@ img {
   image-rendering: -webkit-optimize-contrast;
 }
 
-svg {
-  transition: fill, opacity, transform, stroke;
-  transition-duration: .3s;
-  overflow: visible;
-  width: 100%;
-  height: 100%;
-}
+header,
+footer,
+section {
+  padding-right: 20rem;
+  padding-left: 20rem;
 
-.hide {
-  display: none;
-}
-
-.show {
-  display: block;
-}
-
-.container {
-  padding-right: 4rem;
-  padding-left: 4rem;
-  @include breakpoint($cos-bp) {
-    padding-right: 5rem;
-    padding-left: 5rem;
-  }
   @include breakpoint($xl-bp) {
-    padding-right: 2rem;
-    padding-left: 2rem;
-  }
-  @include breakpoint($sm-bp) {
-    padding-right: 2.5rem;
-    padding-left: 2.5rem;
+    padding-right: 1.6rem;
+    padding-left: 1.6rem;
   }
 }
 
-.img-contain {
-  display: block;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+section {
+  padding-top: 10rem;
+  padding-bottom: 10rem;
+
+  @include breakpoint($xl-bp) {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  &:nth-child(odd) {}
+
+  &:nth-child(even) {
+    background-color: var(--black);
+    color: var(--white);
+
+    p {
+      opacity: 0.8;
+    }
+
+    details {
+      border-color: rgba(255, 255, 255, .16);
+    }
+
+    summary {
+      &::after {
+        filter: invert(1);
+      }
+    }
   }
 }
-.img-cover {
-  display: block;
-  overflow: hidden;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+
+h1,
+h2,
+h3,
+p {
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.4;
+}
+
+h1 {
+  font-size: 7rem;
+
+  margin-bottom: 5.6rem;
+
+  @include breakpoint($xl-bp) {
+    font-size: 4rem;
+    margin-bottom: 2.4rem;
+  }
+}
+
+h2 {
+  font-size: 5.6rem;
+
+  margin-bottom: 2.4rem;
+  margin-top: 5.6rem;
+
+  @include breakpoint($xl-bp) {
+    font-size: 3.2rem;
+  }
+}
+
+h3 {
+  font-size: 2.4rem;
+  margin-top: 5.6rem;
+  margin-bottom: 2.4rem;
+
+  @include breakpoint($xl-bp) {
+    font-size: 2rem;
+  }
+}
+
+p {
+  margin-bottom: 2.4rem;
+}
+
+details {
+  border: 1px solid rgba(77, 62, 58, 0.14);
+  border-radius: 1.2rem;
+  background: var(--background-base);
+
+  margin-top: 2.4rem;
+
+  &>* {
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
+  }
+
+  &[open] {
+    padding-bottom: 1.6rem;
+  }
+}
+
+summary {
+
+  list-style: none;
+  cursor: pointer;
+
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+
+
+  display: flex;
+  align-items: center;
+
+  transition: opacity var(--time);
+
+  position: relative;
+
+  padding: 1.6rem;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &::after {
+    content: '';
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.475 14.475L7.84995 10.85C7.79995 10.8 7.76245 10.7458 7.73745 10.6875C7.71245 10.6292 7.69995 10.5667 7.69995 10.5C7.69995 10.3667 7.74578 10.25 7.83745 10.15C7.92912 10.05 8.04995 10 8.19995 10H15.8C15.95 10 16.0708 10.05 16.1625 10.15C16.2541 10.25 16.3 10.3667 16.3 10.5C16.3 10.5333 16.25 10.65 16.15 10.85L12.525 14.475C12.4416 14.5583 12.3583 14.6167 12.275 14.65C12.1916 14.6833 12.1 14.7 12 14.7C11.9 14.7 11.8083 14.6833 11.725 14.65C11.6416 14.6167 11.5583 14.5583 11.475 14.475Z' fill='%23241E1C' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 2.4rem;
+    height: 2.4rem;
+    flex: 0 0 auto;
+
+    margin-left: auto;
+    transition: transform var(--time);
+  }
+
+  [open] & {
+    &::after {
+      transform: rotate(180deg);
+    }
   }
 }
 

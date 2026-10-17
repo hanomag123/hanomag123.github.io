@@ -43,6 +43,7 @@
     "bootstrap": "^5.2.0-beta1",
     "choices.js": "^10.1.0",
     "gulp-footer": "^2.1.0",
+    "gulp-group-css-media-queries": "^1.2.2",
     "gulp-purgecss": "^5.0.0",
     "gulp-remember": "^1.0.1",
     "gulp-string-replace": "^1.1.2",
