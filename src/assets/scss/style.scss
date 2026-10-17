@@ -138,14 +138,18 @@ h2 {
   }
 }
 
+summary,
 h3 {
   font-size: 2.4rem;
-  margin-top: 5.6rem;
-  margin-bottom: 2.4rem;
 
   @include breakpoint($xl-bp) {
     font-size: 2rem;
   }
+}
+
+h3 {
+  margin-top: 5.6rem;
+  margin-bottom: 2.4rem;
 }
 
 p {
@@ -190,6 +194,8 @@ summary {
   position: relative;
 
   padding: 1.6rem;
+
+  font-weight: 700;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {

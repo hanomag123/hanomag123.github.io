@@ -24,6 +24,7 @@ const footer = require('gulp-footer');
 const svgSprite = require('gulp-svg-sprite')
 const replace = require('gulp-string-replace');
 const groupCssMediaQueries = require('gulp-group-css-media-queries');
+const inlineSource = require("gulp-inline-source");
 
 const Vinyl = require('vinyl')
 
@@ -124,9 +125,11 @@ function html(cb) {
       prefix: '@',
       basepath: '@file',
       context: {
-        telegram: 'https://t.me/hanomag_13'
+        telegram: 'https://t.me/hanomag_13',
+        mydomain: 'https://hanomag123.github.io',
       }
     }))
+    .pipe(inlineSource({ rootpath: require("path").resolve(distPath) }))
     .pipe(dest(path.build.html))
     .pipe(browserSync.reload({ stream: true }));
 
@@ -222,7 +225,6 @@ function cleanCss(cb) {
     //   })
     // )
     .pipe(cssbeautify())
-    .pipe(dest(path.build.css))
     .pipe(
       cssnano({
         zindex: false,
@@ -246,6 +248,7 @@ function cssWatch(cb) {
         includePaths: "./node_modules/",
       })
     )
+    .pipe(groupCssMediaQueries())
     // .pipe(postcss([tailwindcss("./tailwind.config.js")]))
     // .pipe(cssbeautify())
     // .pipe(removeComments())
@@ -432,12 +435,12 @@ function toEnd() {
 
 
 function watchFiles() {
-  gulp.watch([path.watch.html], gulp.series(html, cssWatch));
+  gulp.watch([path.watch.html], html);
   // gulp.watch([path.watch.pug], pugs)
   // gulp.watch([path.watch.css], vendorcss);
   gulp.watch([path.watch.php], php)
    gulp.watch([path.watch.php2], php2)
-  gulp.watch([path.watch.css], cssWatch);
+  gulp.watch([path.watch.css], gulp.series(cssWatch, html));
   gulp.watch([path.watch.js], jsWatch);
   gulp.watch([path.watch.images], imagesWatch);
   // gulp.watch([path.watch.images], images);
@@ -452,13 +455,13 @@ function imagesWithoutMin() {
     .pipe(browserSync.reload({ stream: true }));
 }
 
-const buildOld = gulp.series(clean, gulp.parallel(html, php, php2, css, vendorcss, js, images, fonts));
-const start = gulp.series(cleanWithoutImg, gulp.parallel(html, php, php2, css, js, fonts, sprites));
+const buildOld = gulp.series(clean, css, gulp.parallel(html, php, php2, vendorcss, js, images, fonts));
+const start = gulp.series(cleanWithoutImg, css, gulp.parallel(html, php, php2, js, fonts, sprites));
 const watch = gulp.parallel(start, watchFiles, serve);
 const build = gulp.parallel(buildOld, watchFiles, serve);
-const buildCleanCSS = gulp.series(clean, gulp.parallel(html, cleanCss, js, images, fonts));
+const buildCleanCSS = gulp.series(clean, cleanCss, html, gulp.parallel(js, images, fonts));
 const make = gulp.series(gulp.parallel(newFile, toEnd));
-const buildNMin = gulp.series(clean, html, css, js, images, fonts, sprites);
+const buildNMin = gulp.series(clean, css, html, js, images, fonts, sprites);
 
 /* Exports Tasks */
 
@@ -479,4 +482,3 @@ exports.start = start
 exports.buildCleanCSS = buildCleanCSS
 exports.buildNMin = buildNMin
 exports.sprites = sprites;
-
