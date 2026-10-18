@@ -1,3 +1,1 @@
-[Pages](https://studio-yarrr.github.io/website-)
-
-[Figma]()
+[Pages](https://hanomag123.github.io/)
